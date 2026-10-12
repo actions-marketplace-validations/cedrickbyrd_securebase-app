@@ -25,14 +25,13 @@ if (!process.env.SUPABASE_URL) {
 
 export const supabase = createClient(supabaseUrl, supabaseKey, {
   auth: {
-    persistSession: false, // Recommended for Node.js server backends
+    persistSession: false,
   },
   global: {
     fetch,
   },
-  // Pass the ws implementation to real-time client
   realtime: {
-    transport: ws,
+    transport: ws as any,
   },
 });
 
