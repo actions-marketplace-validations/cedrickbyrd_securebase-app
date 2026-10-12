@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
+import { ComplianceExportButton, handleDownloadEvidenceExport } from './ComplianceExportButton';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -412,6 +413,14 @@ function QuickActions({ scanInfo, onAction, onScanComplete }) {
         {actionStatus?.label === 'Export CSV' && actionStatus.loading ? 'Exporting…' : '⬇ Export CSV'}
       </button>
 
+      <button
+        type="button"
+        onClick={() => handleDownloadEvidenceExport('cnb-waxahachie', 'FFIEC')}
+        className="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 shadow-sm"
+      >
+        🛡️ Export Signed Audit Package
+      </button>
+
       {actionStatus && !actionStatus.loading && (
         <p className="text-xs text-center text-green-700 bg-green-50 rounded px-3 py-2">
           {actionStatus.message}
@@ -506,9 +515,12 @@ export default function ComplianceDashboard() {
           <ComparisonBanner yourScore={finalScore} onDismiss={dismissComparison} />
         )}
 
-        <header className="mb-8">
-          <h1 className="text-2xl font-black text-slate-900">Compliance Dashboard</h1>
-          <p className="text-sm text-slate-500 mt-1">Real-time overview across SOC 2, HIPAA, and FedRAMP frameworks</p>
+        <header className="mb-8 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-black text-slate-900">Compliance Dashboard</h1>
+            <p className="text-sm text-slate-500 mt-1">Real-time overview across FFIEC, SOC 2, HIPAA, and FedRAMP frameworks</p>
+          </div>
+          <ComplianceExportButton tenantId="cnb-waxahachie" framework="FFIEC" />
         </header>
 
         {error && (
