@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { createClient } from '@supabase/supabase-js';
 import ws from 'ws';
+import complianceRouter from './routes/compliance.js';
 
 dotenv.config();
 
@@ -35,9 +36,13 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
   },
 });
 
+// Health check endpoint
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok', timestamp: new Date() });
 });
+
+// Mount compliance router
+app.use('/api/v1/compliance', complianceRouter);
 
 app.listen(Number(PORT), '0.0.0.0', () => {
   console.log(`Server listening on port ${PORT}`);
