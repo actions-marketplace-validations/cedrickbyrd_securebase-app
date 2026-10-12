@@ -4,6 +4,11 @@ import { supabase } from '../server.js';
 
 const router = Router();
 
+// Helper to prevent PostgreSQL 42883 (UUID operator mismatch)
+const isUUID = (str: string): boolean => {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\$/i.test(str);
+};
+
 router.get('/export', async (req: Request, res: Response): Promise<void> => {
   try {
     const tenantParam = req.query.tenant_id as string | undefined;
@@ -16,11 +21,14 @@ router.get('/export', async (req: Request, res: Response): Promise<void> => {
 
     const cleanTenantId = tenantParam.trim();
 
-    // Query target table: compliance_evaluations
-    let query = supabase
-      .from('compliance_evaluations')
-      .select('*')
-      .or(`id.ilike.${cleanTenantId},tenant_id.ilike.${cleanTenantId}`);
+    // Query compliance_evaluations table safely
+    let query = supabase.from('compliance_evaluations').select('*');
+
+    if (isUUID(cleanTenantId)) {
+      query = query.or(`id.eq.${cleanTenantId},tenant_id.eq.${cleanTenantId}`);
+    } else {
+      query = query.eq('tenant_id', cleanTenantId);
+    }
 
     if (frameworkParam) {
       query = query.eq('framework', frameworkParam.trim());
@@ -29,7 +37,7 @@ router.get('/export', async (req: Request, res: Response): Promise<void> => {
     const { data: records, error } = await query;
 
     if (error) {
-      console.error('Supabase query database error:', error);
+      console.error('Supabase database query error:', error);
       res.status(500).json({ error: 'Database query execution failed', details: error.message });
       return;
     }
@@ -47,7 +55,7 @@ router.get('/export', async (req: Request, res: Response): Promise<void> => {
     const evaluation_metadata = summary.evaluation_metadata || {};
 
     const manifestPayload = {
-      tenant_id: summary.id || summary.tenant_id || cleanTenantId,
+      tenant_id: summary.tenant_id || summary.id || cleanTenantId,
       framework: summary.framework,
       status: summary.status || 'COMPLIANT',
       overall_score: summary.overall_score ?? 97.25,
