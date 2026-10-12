@@ -17,11 +17,25 @@ app.use(cors({
 
 app.use(express.json());
 
-const supabaseUrl = process.env.SUPABASE_URL || 'https://placeholder.supabase.co';
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-key';
+// Target project URL
+const supabaseUrl = process.env.SUPABASE_URL || 'https://dvmuaivsbtrykqsnrtnv.supabase.co';
 
+// Resolve key prioritizing service role, then generic key, then fallback placeholder
+const supabaseKey = 
+  process.env.SUPABASE_SERVICE_ROLE_KEY || 
+  process.env.SUPABASE_KEY || 
+  process.env.SUPABASE_ANON_KEY || 
+  'placeholder-key';
+
+// Startup environment warnings
 if (!process.env.SUPABASE_URL) {
-  console.warn('⚠️ WARNING: SUPABASE_URL environment variable is missing in Render.');
+  console.warn('⚠️ WARNING: SUPABASE_URL environment variable is missing.');
+}
+
+if (!process.env.SUPABASE_SERVICE_ROLE_KEY && !process.env.SUPABASE_KEY) {
+  console.warn('⚠️ WARNING: SUPABASE_SERVICE_ROLE_KEY is missing. Database queries will fail.');
+} else {
+  console.log('✅ Supabase initialized with configured service key.');
 }
 
 export const supabase = createClient(supabaseUrl, supabaseKey, {
