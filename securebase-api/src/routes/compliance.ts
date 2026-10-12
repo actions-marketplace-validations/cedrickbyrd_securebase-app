@@ -1,10 +1,5 @@
-import { Router, Request, Response } from 'express';
-import { supabase } from '../server.js';
-import crypto from 'crypto';
+// src/routes/compliance.ts
 
-const router = Router();
-
-// GET /api/v1/compliance/export?tenant_id=cnb-waxahachie&framework=FFIEC
 router.get('/export', async (req: Request, res: Response) => {
   try {
     const { tenant_id, framework } = req.query;
@@ -13,11 +8,13 @@ router.get('/export', async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Missing tenant_id parameter' });
     }
 
-    // 1. Fetch live evaluation summary from Supabase
+    const tenantKey = tenant_id as string;
+
+    // Query matching either 'id' or 'tenant_id'
     let query = supabase
       .from('compliance_summaries')
       .select('*')
-      .eq('tenant_id', tenant_id as string);
+      .or(`id.eq.${tenantKey},tenant_id.eq.${tenantKey}`);
 
     if (framework) {
       query = query.eq('framework', framework as string);
@@ -26,15 +23,16 @@ router.get('/export', async (req: Request, res: Response) => {
     const { data: records, error } = await query;
 
     if (error || !records || records.length === 0) {
+      console.error('Supabase query error or empty result:', error);
       return res.status(404).json({ error: 'Compliance record not found' });
     }
 
     const summary = records[0];
     const { evaluation_metadata } = summary;
 
-    // 2. Construct signed cryptographic audit manifest
+    // Construct cryptographic audit package
     const manifestPayload = {
-      tenant_id: summary.id,
+      tenant_id: summary.id || summary.tenant_id,
       framework: summary.framework,
       status: summary.status,
       overall_score: summary.overall_score,
@@ -47,7 +45,6 @@ router.get('/export', async (req: Request, res: Response) => {
       vault_reference: `s3://securebase-vault-logs/${evaluation_metadata?.report_id || 'manifest.json'}`
     };
 
-    // Calculate cryptographic signature over manifest payload
     const signature = crypto
       .createHmac('sha256', process.env.SUPABASE_SERVICE_ROLE_KEY || 'secret')
       .update(JSON.stringify(manifestPayload))
@@ -59,11 +56,10 @@ router.get('/export', async (req: Request, res: Response) => {
       signature_algorithm: 'HMAC-SHA256'
     };
 
-    // 3. Set download headers for JSON evidence package
     res.setHeader('Content-Type', 'application/json');
     res.setHeader(
       'Content-Disposition',
-      `attachment; filename="${summary.id}_${summary.framework}_evidence_export.json"`
+      `attachment; filename="${tenantKey}_${summary.framework}_evidence_export.json"`
     );
 
     return res.status(200).send(JSON.stringify(exportBundle, null, 2));
@@ -72,5 +68,3 @@ router.get('/export', async (req: Request, res: Response) => {
     return res.status(500).json({ error: 'Internal server error generating export package' });
   }
 });
-
-export default router;
