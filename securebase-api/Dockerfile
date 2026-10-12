@@ -11,7 +11,7 @@ RUN npm install
 # Copy backend source files
 COPY src ./src
 
-# Compile TypeScript to JavaScript (outputs to dist/server.js)
+# Compile TypeScript to JavaScript (outputs to dist/server.ts)
 RUN npm run build
 
 # Stage 2: Minimal Production Runtime
@@ -32,4 +32,4 @@ USER node
 
 EXPOSE 10000
 
-CMD ["node", "dist/server.js"]
+CMD ["node", "dist/server.ts"]
