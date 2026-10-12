@@ -16,9 +16,9 @@ router.get('/export', async (req: Request, res: Response): Promise<void> => {
 
     const cleanTenantId = tenantParam.trim();
 
-    // 1. Dual-column case-insensitive query to prevent schema mismatches
+    // Query target table: compliance_evaluations
     let query = supabase
-      .from('compliance_summaries')
+      .from('compliance_evaluations')
       .select('*')
       .or(`id.ilike.${cleanTenantId},tenant_id.ilike.${cleanTenantId}`);
 
@@ -35,8 +35,6 @@ router.get('/export', async (req: Request, res: Response): Promise<void> => {
     }
 
     if (!records || records.length === 0) {
-      // Diagnostic logging to track non-matching requests
-      console.warn(`[EXPORT 404] No compliance_summaries record matched ID: "${cleanTenantId}" with framework: "${frameworkParam || 'ANY'}"`);
       res.status(404).json({ 
         error: 'Compliance record not found',
         searched_id: cleanTenantId,
@@ -48,7 +46,6 @@ router.get('/export', async (req: Request, res: Response): Promise<void> => {
     const summary = records[0];
     const evaluation_metadata = summary.evaluation_metadata || {};
 
-    // 2. Construct signed audit manifest payload
     const manifestPayload = {
       tenant_id: summary.id || summary.tenant_id || cleanTenantId,
       framework: summary.framework,
@@ -63,7 +60,6 @@ router.get('/export', async (req: Request, res: Response): Promise<void> => {
       vault_reference: `s3://securebase-vault-logs/${evaluation_metadata.report_id || 'ffiec_report_20261004_133600.json'}`
     };
 
-    // Calculate HMAC signature over canonical JSON string
     const secretKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'securebase-local-secret';
     const signature = crypto
       .createHmac('sha256', secretKey)
@@ -76,7 +72,6 @@ router.get('/export', async (req: Request, res: Response): Promise<void> => {
       signature_algorithm: 'HMAC-SHA256'
     };
 
-    // 3. Output headers and stream JSON evidence attachment
     res.setHeader('Content-Type', 'application/json');
     res.setHeader(
       'Content-Disposition',
