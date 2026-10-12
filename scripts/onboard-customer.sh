@@ -80,10 +80,10 @@ validate_inputs() {
   fi
   
   # Validate framework
-  if [[ ! "$FRAMEWORK" =~ ^(soc2|hipaa|fedramp|cis)$ ]]; then
+  if [[ ! "$FRAMEWORK" =~ ^(soc2|hipaa|fedramp|cis|ffiec|pci-dss)$ ]]; then
     print_error "Invalid framework: $FRAMEWORK"
   fi
-  
+
   # Validate email
   if [[ ! "$EMAIL" =~ ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$ ]]; then
     print_error "Invalid email: $EMAIL"
@@ -483,7 +483,7 @@ generate_deployment_summary() {
 - Multi-region support: Available
 
 ### Organizational Units
-- ✅ Customers-${FRAMEWORK^^}
+- ✅ Customers-$(echo "$FRAMEWORK" | tr '[:lower:]' '[:upper:]')
 - ✅ Security
 - ✅ Shared Services
 - ✅ Workloads
