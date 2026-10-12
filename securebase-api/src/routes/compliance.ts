@@ -17,7 +17,7 @@ router.get('/export', async (req: Request, res: Response) => {
     let query = supabase
       .from('compliance_summaries')
       .select('*')
-      .eq('id', tenant_id as string);
+      .eq('tenant_id', tenant_id as string);
 
     if (framework) {
       query = query.eq('framework', framework as string);
