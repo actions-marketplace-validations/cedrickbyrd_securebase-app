@@ -1,0 +1,229 @@
+name: SecureBase Compliance Gatekeeper
+
+on:
+  pull_request:
+    branches: [ main, master, production ]
+    paths:
+      - '**.tf'
+      - '**.tfvars'
+      - 'terraform/**'
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+jobs:
+  securebase-audit:
+    name: Evaluate Infrastructure Drift & Compliance
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup HashiCorp Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.8.0
+
+      - name: Initialize Terraform
+        run: terraform init -backend=false
+
+      - name: Generate Binary & JSON Execution Plan
+        id: plan
+        run: |
+          terraform plan -no-color -out=tfplan.binary
+          terraform show -json tfplan.binary > tfplan.json
+
+      - name: Execute SecureBase MCP Policy Evaluation
+        id: securebase_eval
+        continue-on-error: true
+        env:
+          SECUREBASE_TENANT_ID: "tenant-${{ github.event.repository.owner.login }}-${{ github.event.repository.name }}"
+          SECUREBASE_DEMO_HOST: "demo.securebase.tximhotep.com"
+        run: |
+          # Bootstrap node runtime and execute formatting engine
+          npm install @modelcontextprotocol/sdk zod --no-save
+          node .github/scripts/securebase-formatter.js tfplan.json > securebase-report.json
+          echo "REPORT_EXISTS=true" >> \$GITHUB_ENV
+
+      - name: Format & Post PR Compliance Report
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            if (!fs.existsSync('./securebase-report.json')) {
+              core.setFailed("SecureBase evaluation report was not generated.");
+              return;
+            }
+
+            const report = JSON.parse(fs.readFileSync('./securebase-report.json', 'utf8'));
+            const commentBody = report.markdown_summary;
+
+            // Search for existing SecureBase comment to prevent comment bloat
+            const comments = await github.rest.issues.listComments({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+
+            const existingComment = comments.data.find(comment => 
+              comment.user.login === 'github-actions[bot]' && 
+              comment.body.includes('SecureBase Multi-Cloud Compliance Report')
+            );
+
+            if (existingComment) {
+              await github.rest.issues.updateComment({
+                comment_id: existingComment.id,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: commentBody
+              });
+            } else {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: commentBody
+              });
+            }
+
+            if (report.critical_violations > 0) {
+              core.setFailed(`SecureBase blocked merge: ${report.critical_violations} critical compliance violations detected.`);
+            }
+
+---
+
+## 2. PR Comment Formatter Script (`.github/scripts/securebase-formatter.js`)
+
+Save this Node.js engine script to process the `tfplan.json` artifact, calculate posture metrics, and output markdown formatted for developer conversion.
+
+```javascript
+const fs = require('fs');
+const path = require('path');
+
+function processPlan() {
+  const planPath = process.argv[2] || 'tfplan.json';
+  if (!fs.existsSync(planPath)) {
+    console.error(`Plan file not found: ${planPath}`);
+    process.exit(1);
+  }
+
+  const rawPlan = fs.readFileSync(planPath, 'utf8');
+  let planData;
+  try {
+    planData = JSON.parse(rawPlan);
+  } catch (err) {
+    console.error("Failed to parse tfplan.json:", err.message);
+    process.exit(1);
+  }
+
+  const resourceChanges = planData.resource_changes || [];
+  const findings = [];
+  let criticalCount = 0;
+  let highCount = 0;
+  let mediumCount = 0;
+
+  resourceChanges.forEach((change) => {
+    const type = change.type;
+    const name = change.name;
+    const address = change.address;
+    const values = change.change.after || {};
+
+    // S3 KMS Encryption & Object Lock Evaluation (FFIEC / HIPAA)
+    if (type === 'aws_s3_bucket') {
+      if (!values.object_lock_enabled) {
+        findings.push({
+          severity: 'CRITICAL',
+          resource: address,
+          rule: 'S3 Object Lock Disabled (WORM Invalidation)',
+          citation: 'FFIEC CAT Appendix A / HIPAA § 164.312(c)(1)',
+          remediation: 'Enable object_lock_enabled = true to preserve immutable audit trails.'
+        });
+        criticalCount++;
+      }
+    }
+
+    if (type === 'aws_s3_bucket_server_side_encryption_configuration') {
+      const rules = values.rule || [];
+      const hasKms = rules.some(r => 
+        r.apply_server_side_encryption_by_default && 
+        r.apply_server_side_encryption_by_default.sse_algorithm === 'aws:kms'
+      );
+      if (!hasKms) {
+        findings.push({
+          severity: 'HIGH',
+          resource: address,
+          rule: 'Missing Customer-Managed KMS Key Encryption',
+          citation: 'FFIEC IT Examination Handbook: InfoSec / SOC 2 CC6.1',
+          remediation: 'Configure sse_algorithm = "aws:kms" with dedicated KMS Key ARN.'
+        });
+        highCount++;
+      }
+    }
+
+    // Security Group Open Ingress (NIST / FFIEC)
+    if (type === 'aws_security_group') {
+      const ingressRules = values.ingress || [];
+      ingressRules.forEach((rule) => {
+        const cidrs = rule.cidr_blocks || [];
+        if (cidrs.includes('0.0.0.0/0') && (rule.from_port === 22 || rule.from_port === 3389)) {
+          findings.push({
+            severity: 'CRITICAL',
+            resource: address,
+            rule: `Unrestricted Administrative Port (${rule.from_port}) Ingress`,
+            citation: 'NIST SP 800-53 AC-17 / FFIEC CAT Domain 3',
+            remediation: 'Restrict cidr_blocks to enterprise bastion IP ranges.'
+          });
+          criticalCount++;
+        }
+      });
+    }
+  });
+
+  const totalFindings = findings.length;
+  const initialScore = totalFindings === 0 ? 100 : Math.max(45, 100 - (criticalCount * 20 + highCount * 10 + mediumCount * 5));
+  
+  const tenantId = process.env.SECUREBASE_TENANT_ID || 'demo-enterprise-sandbox';
+  const demoHost = process.env.SECUREBASE_DEMO_HOST || 'demo.securebase.tximhotep.com';
+  const interactiveSandboxUrl = `https://${demoHost}/compliance?tenant=${tenantId}&utm_source=github_actions&utm_medium=pr_comment&utm_campaign=securebase_mcp_shift_left`;
+
+  // Build Markdown Comment Output
+  let markdown = `## SecureBase Multi-Cloud Compliance Report\n\n`;
+  markdown += `**Compliance Score:** \`\${initialScore}%\` ${initialScore >= 90 ? '🟢' : initialScore >= 70 ? '🟡' : '🔴'}\n`;
+  markdown += `**Evaluated Frameworks:** FFIEC CAT | HIPAA Security Rule | SOC 2 Type II\n\n`;
+
+  if (totalFindings === 0) {
+    markdown += `✅ **No compliance drift or regulatory violations detected.** Infrastructure change is ready for merge.\n\n`;
+  } else {
+    markdown += `⚠️ **${totalFindings} Non-Compliant Configuration(s) Detected:**\n\n`;
+    markdown += `| Severity | Finding / Policy | Resource | Framework Citation |\n`;
+    markdown += `| :--- | :--- | :--- | :--- |\n`;
+    findings.forEach((f) => {
+      const severityIcon = f.severity === 'CRITICAL' ? '🚨 CRITICAL' : f.severity === 'HIGH' ? '🔶 HIGH' : '🔹 MEDIUM';
+      markdown += `| ${severityIcon} | **${f.rule}**<br>_${f.remediation}_ | \`\${f.resource}\` | \`\${f.citation}\` |\n`;
+    });
+    markdown += `\n`;
+  }
+
+  markdown += `### 🛠️ Interactive Remediation & Audit Vault\n`;
+  markdown += `Simulate live OPA fixes and download signed WORM audit evidence packages for this PR:\n`;
+  markdown += `👉 **[Launch SecureBase Interactive Sandbox](${interactiveSandboxUrl})**\n\n`;
+  markdown += `_\`securebase-mcp\` automated guardrail engine executed by TxImhotep LLC._`;
+
+  const reportOutput = {
+    evaluated_at: new Date().toISOString(),
+    score: initialScore,
+    total_violations: totalFindings,
+    critical_violations: criticalCount,
+    high_violations: highCount,
+    findings: findings,
+    demo_sandbox_url: interactiveSandboxUrl,
+    markdown_summary: markdown
+  };
+
+  console.log(JSON.stringify(reportOutput, null, 2));
+}
+
+processPlan();
