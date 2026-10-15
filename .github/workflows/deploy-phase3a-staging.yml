@@ -34,7 +34,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2 # v4.2.2
 
       - name: Setup Node.js 20
-        uses: actions/setup-node@39370e3970a6d050c08001ac42da3710b5a9122c # v4.2.0 # v4.4.0
+        uses: actions/setup-node@0a1232133319203c280fe070077626463be003c4 # v4.2.0 # v4.2.0 # v4.2.0 # v4.4.0
         with:
           node-version: '20'
           cache: 'npm'
