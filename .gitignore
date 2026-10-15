@@ -211,3 +211,8 @@ mock_event.json
 GEMINI.md
 **/GEMINI.md
 .env
+
+# Terraform local binaries ignore
+**/.terraform/
+*.tfstate
+*.tfstate.*
