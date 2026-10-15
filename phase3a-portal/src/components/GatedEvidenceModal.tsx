@@ -36,8 +36,9 @@ export const GatedEvidenceModal: React.FC<GatedEvidenceModalProps> = ({
     const params = new URLSearchParams(window.location.search);
 
     try {
-      // Ingest lead record into Supabase
-      const { error: dbError } = await supabase.from('gated_evidence_leads').insert([
+      console.log('[SecureBase] Attempting lead insertion into Supabase:', { email, organization });
+      
+      const { data, error: dbError } = await supabase.from('gated_evidence_leads').insert([
         {
           ciso_email: email,
           organization_name: organization,
@@ -47,18 +48,20 @@ export const GatedEvidenceModal: React.FC<GatedEvidenceModalProps> = ({
           utm_content: params.get('utm_content') || 'anonymous',
           user_agent: navigator.userAgent,
         },
-      ]);
+      ]).select();
 
       if (dbError) {
-        console.error('[SecureBase Lead Ingestion Error]:', dbError.message);
+        console.error('[SecureBase Lead Ingestion Error Details]:', dbError);
+        setError(`DB Error: ${dbError.message}`);
+      } else {
+        console.log('[SecureBase Lead Ingestion Success]:', data);
       }
 
-      // Trigger release of cryptographically signed SHA-256 evidence download
       onDownload();
       onClose();
     } catch (err) {
-      console.error('[SecureBase Modal Submission Error]:', err);
-      // Fallback: release evidence on client exception to maintain prospect momentum
+      console.error('[SecureBase Modal Submission Exception]:', err);
+      setError('An unexpected error occurred.');
       onDownload();
       onClose();
     } finally {
