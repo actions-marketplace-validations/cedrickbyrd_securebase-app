@@ -1,0 +1,54 @@
+name: 'SecureBase Shift-Left Compliance Scanner'
+description: 'Automated FFIEC, HIPAA, and NIST compliance scanning for Terraform with live remediation preview links.'
+author: 'TxImhotep LLC'
+branding:
+  icon: 'shield'
+  color: 'blue'
+
+inputs:
+  working-directory:
+    description: 'Directory containing Terraform or OpenTofu code to scan.'
+    required: false
+    default: '.'
+  fail-on-severity:
+    description: 'Minimum finding severity to fail the build (CRITICAL, HIGH, MEDIUM, LOW, NONE).'
+    required: false
+    default: 'HIGH'
+  comment-on-pr:
+    description: 'Automatically post structured compliance reports with remediation links to the Pull Request.'
+    required: false
+    default: 'true'
+  github-token:
+    description: 'GitHub token for posting PR comments.'
+    required: false
+    default: ${{ github.token }}
+
+outputs:
+  findings-count:
+    description: 'Total number of non-compliant infrastructure findings detected.'
+  critical-count:
+    description: 'Number of critical findings.'
+  high-count:
+    description: 'Number of high findings.'
+  compliance-score:
+    description: 'Overall compliance posture percentage score.'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Node.js Runtime
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Run SecureBase Formatter & Compliance Scan
+      shell: bash
+      env:
+        INPUT_WORKING_DIRECTORY: ${{ inputs.working-directory }}
+        INPUT_FAIL_ON_SEVERITY: ${{ inputs.fail-on-severity }}
+        INPUT_COMMENT_ON_PR: ${{ inputs.comment-on-pr }}
+        INPUT_GITHUB_TOKEN: ${{ inputs.github-token }}
+        GITHUB_REPOSITORY: ${{ github.repository }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
+      run: |
+        node ${{ github.action_path }}/.github/actions/shift-left-compliance-action/securebase-formatter.cjs
