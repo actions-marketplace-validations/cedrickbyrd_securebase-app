@@ -156,7 +156,7 @@ jobs:
           fi
 
       - name: Setup Node.js
-        uses: actions/setup-node@0a1232133319203c280fe070077626463be003c4 # v4.2.0
+        uses: actions/setup-node@0ad4b8fadaa221e08925622a96f1b1a735e5d36e # v4.2.0
         with:
           node-version: '20'
 
