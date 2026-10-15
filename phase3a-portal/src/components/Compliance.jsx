@@ -41,3 +41,8 @@ export const Compliance = () => {
 
   // ... rest of component
 };
+// Ensure default export compatibility
+export default Compliance;
+
+// Ensure default export compatibility for App.jsx
+export default Compliance;
