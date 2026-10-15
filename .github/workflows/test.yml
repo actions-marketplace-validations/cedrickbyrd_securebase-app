@@ -19,8 +19,8 @@ jobs:
     name: Lint & Typecheck
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/setup-node@60ed15869b13d9b3f126ea68379203714b10882e # v4.2.0 # v4.1.0
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2 # v4.2.2
+      - uses: actions/setup-node@39370e3970a6d050c08001ac42da3710b5a9122c # v4.2.0 # v4.2.0 # v4.1.0
         with:
           node-version: 20
           cache: 'npm'
@@ -37,8 +37,8 @@ jobs:
       SECUREBASE_PLATFORM_OIDC_TOKEN: "ci-mock-jwt-token-00000000"
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/setup-node@60ed15869b13d9b3f126ea68379203714b10882e # v4.2.0 # v4.1.0
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2 # v4.2.2
+      - uses: actions/setup-node@39370e3970a6d050c08001ac42da3710b5a9122c # v4.2.0 # v4.2.0 # v4.1.0
         with:
           node-version: 20
           cache: 'npm'
