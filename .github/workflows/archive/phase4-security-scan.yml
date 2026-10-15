@@ -93,7 +93,7 @@ jobs:
 
       # JavaScript dependency scanning
       - name: Set up Node.js
-        uses: actions/setup-node@1d081d3298a883a48e718f40776a3e230386e804 # v4.1.0
+        uses: actions/setup-node@60ed15869b13d9b3f126ea68379203714b10882e # v4.2.0 # v4.1.0
         with:
           node-version: ${{ env.NODE_VERSION }}
 
@@ -609,7 +609,7 @@ jobs:
 
       # ESLint security for JavaScript
       - name: Set up Node.js
-        uses: actions/setup-node@1d081d3298a883a48e718f40776a3e230386e804 # v4.1.0
+        uses: actions/setup-node@60ed15869b13d9b3f126ea68379203714b10882e # v4.2.0 # v4.1.0
         with:
           node-version: ${{ env.NODE_VERSION }}
 
