@@ -19,7 +19,7 @@ jobs:
     name: SQL Schema Validation
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2 # v4.2.2 # v4.2.2
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Validate RBAC SQL
         run: |
           # Ensure the modernized file exists in the root database folder
@@ -36,10 +36,10 @@ jobs:
     name: Vite & Netlify Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2 # v4.2.2 # v4.2.2
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       
       - name: Setup Node.js
-        uses: actions/setup-node@60ed15869b13d9b3f126ea68379203714b10882e # v4.0.0 # v4.1.0 # v4.0.2 # v4.2.0 # v4.2.0 # v4.2.0 # v4.2.0 # v4.1.0
+        uses: actions/setup-node@0a1232133319203c280fe070077626463be003c4 # v4.2.0
         with:
           node-version: '20'
           cache: 'npm'
@@ -62,7 +62,7 @@ jobs:
     name: Security Scan (CodeQL & Secrets)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2 # v4.2.2 # v4.2.2
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
