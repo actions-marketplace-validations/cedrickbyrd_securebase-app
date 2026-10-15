@@ -40,10 +40,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2 # v4.2.2
+        uses: actions/checkout@v4 # v4.2.2 # v4.2.2
 
       - name: Setup Node.js
-        uses: actions/setup-node@5e8422612396425301d03ad4d22843a80c11b884 # v4.0.2 # v4.2.0 # v4.2.0 # v4.2.0 # v4.2.0 # v4.1.0
+        uses: actions/setup-node@v4 # v4.0.2 # v4.2.0 # v4.2.0 # v4.2.0 # v4.2.0 # v4.1.0
         with:
           node-version: '20'
           cache: 'npm'
