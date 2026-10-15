@@ -65,10 +65,10 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@39370e3970a6d050c08001ac42da3710b5a9122c # v4.1.0
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -103,10 +103,10 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@39370e3970a6d050c08001ac42da3710b5a9122c # v4.1.0
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -130,7 +130,7 @@ jobs:
 
       - name: Upload test coverage
         if: always()
-        uses: actions/upload-artifact@v4.4.3
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3.4.3
         with:
           name: frontend-coverage
           path: phase3a-portal/coverage/
@@ -147,10 +147,10 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@39370e3970a6d050c08001ac42da3710b5a9122c # v4.1.0
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -176,7 +176,7 @@ jobs:
 
       - name: Upload screenshots
         if: always()
-        uses: actions/upload-artifact@v4.4.3
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3.4.3
         with:
           name: screenshots-${{ matrix.theme }}-${{ matrix.browser }}
           path: phase3a-portal/screenshots/
@@ -192,10 +192,10 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@0b7f8abb1508181956e8e162db84b466c2711723 # v5.3.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: 'pip'
@@ -229,10 +229,10 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@0b7f8abb1508181956e8e162db84b466c2711723 # v5.3.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: 'pip'
@@ -260,7 +260,7 @@ jobs:
 
       - name: Upload test coverage
         if: always()
-        uses: actions/upload-artifact@v4.4.3
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3.4.3
         with:
           name: backend-coverage
           path: phase2-backend/tests/coverage.xml
@@ -276,10 +276,10 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e888156567d6ead84f027f3 # v3.1.2
         with:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
 
@@ -329,10 +329,10 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@0b7f8abb1508181956e8e162db84b466c2711723 # v5.3.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
@@ -369,7 +369,7 @@ jobs:
 
       - name: Upload security report
         if: always()
-        uses: actions/upload-artifact@v4.4.3
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3.4.3
         with:
           name: security-scan-results
           path: bandit-report.json
@@ -388,10 +388,10 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@39370e3970a6d050c08001ac42da3710b5a9122c # v4.1.0
         with:
           node-version: ${{ env.NODE_VERSION }}
 
@@ -436,17 +436,17 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@39370e3970a6d050c08001ac42da3710b5a9122c # v4.1.0
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
           cache-dependency-path: 'phase3a-portal/package-lock.json'
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@0b7f8abb1508181956e8e162db84b466c2711723 # v5.3.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
@@ -485,7 +485,7 @@ jobs:
 
       - name: Upload integration test logs
         if: always()
-        uses: actions/upload-artifact@v4.4.3
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3.4.3
         with:
           name: integration-test-logs
           path: logs/
@@ -512,7 +512,7 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Generate comprehensive CI summary
         run: |
