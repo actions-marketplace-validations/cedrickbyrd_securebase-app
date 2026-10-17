@@ -26,7 +26,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Node environment
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        uses: actions/setup-node@0ad4b8fadaa221e08925622a96f1b1a735e5d36e # v4.2.0
         with:
 node-version: '20.19.0'          
        cache: 'npm'

@@ -76,23 +76,23 @@ export default function DemoDashboard() {
         <div className="grid grid-cols-4 gap-6 mb-8">
           <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-6">
             <div className="text-4xl mb-2">🏗️</div>
-            <div className="text-3xl font-bold mb-1">3</div>
-            <div className="text-sm font-semibold">Environments</div>
+            <div className="text-3xl font-bold mb-1 text-slate-900">3</div>
+            <div className="text-sm font-semibold text-slate-700">Environments</div>
           </div>
           <div className="bg-green-50 border-2 border-green-200 rounded-lg p-6">
             <div className="text-4xl mb-2">✅</div>
-            <div className="text-3xl font-bold mb-1">{metrics?.soc2Score ?? 94}%</div>
-            <div className="text-sm font-semibold">SOC 2 Compliance</div>
+            <div className="text-3xl font-bold mb-1 text-slate-900">{metrics?.soc2Score ?? 94}%</div>
+            <div className="text-sm font-semibold text-slate-700">SOC 2 Compliance</div>
           </div>
           <div className="bg-purple-50 border-2 border-purple-200 rounded-lg p-6">
             <div className="text-4xl mb-2">💰</div>
-            <div className="text-3xl font-bold mb-1">$8,247</div>
-            <div className="text-sm font-semibold">Monthly Cost</div>
+            <div className="text-3xl font-bold mb-1 text-slate-900">\$8,247</div>
+            <div className="text-sm font-semibold text-slate-700">Monthly Cost</div>
           </div>
           <div className="bg-indigo-50 border-2 border-indigo-200 rounded-lg p-6">
             <div className="text-4xl mb-2">🛡️</div>
-            <div className="text-3xl font-bold mb-1">A+</div>
-            <div className="text-sm font-semibold">Security Score</div>
+            <div className="text-3xl font-bold mb-1 text-slate-900">A+</div>
+            <div className="text-sm font-semibold text-slate-700">Security Score</div>
           </div>
         </div>
 
@@ -176,15 +176,15 @@ export default function DemoDashboard() {
         <div className="grid grid-cols-3 gap-6">
           {['Production', 'Staging', 'Development'].map((env, i) => (
             <div key={env} className="bg-white border-2 rounded-lg p-6">
-              <h3 className="text-lg font-bold mb-4">{env}</h3>
-              <div className="space-y-2 text-sm">
+              <h3 className="text-lg font-bold mb-4 text-slate-900">{env}</h3>
+              <div className="space-y-2 text-sm text-slate-700">
                 <div className="flex justify-between">
                   <span>Region:</span>
-                  <span className="font-medium">us-east-1</span>
+                  <span className="font-medium text-slate-900">us-east-1</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Resources:</span>
-                  <span className="font-medium">{47 - i * 5}</span>
+                  <span className="font-medium text-slate-900">{47 - i * 5}</span>
                 </div>
               </div>
             </div>

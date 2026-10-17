@@ -16,10 +16,10 @@ jobs:
 
     steps:
       - name: Checkout Source Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Run SecureBase Compliance Action
-        uses: securebase/shift-left-compliance-action@v1
+        run: python3 compliance_evidence_collector.py --mode shift-left
         with:
           working-directory: '.'
           fail-on-severity: 'HIGH'

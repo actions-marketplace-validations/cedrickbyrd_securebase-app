@@ -6,65 +6,12 @@
 [build.environment]
   NODE_VERSION = "20"
   NPM_FLAGS = "--legacy-peer-deps"
+  VITE_ENABLE_MOCK_API = "false"
+  VITE_USE_SUPABASE = "true"
+  VITE_SUPABASE_URL = "https://dvmuaivsbtrykqsnrtnv.supabase.co"
+  VITE_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2bXVhaXZzYnRyeWtxc25ydG52Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg4NTgwMDAsImV4cCI6MjA1NDQzNDAwMH0"
 
-# API REDIRECTS - Clean, no headers
-[[redirects]]
-  from = "/api/login"
-  to = "https://9xyetu7zq3.execute-api.us-east-1.amazonaws.com/prod/auth/login"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/checkout"
-  to = "https://4f0i48ueak.execute-api.us-east-1.amazonaws.com/prod/checkout"
-  status = 200
-  force = true
-
-# PILOT ENDPOINTS
-[[redirects]]
-  from = "/pilot/availability"
-  to = "https://api.securebase.tximhotep.com/pilot/availability"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/validate-session"
-  to = "https://api.securebase.tximhotep.com/validate-session"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/signup"
-  to = "https://api.securebase.tximhotep.com/signup"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/verify-email"
-  to = "https://api.securebase.tximhotep.com/verify-email"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/onboarding/*"
-  to = "https://api.securebase.tximhotep.com/onboarding/:splat"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/auth/*"
-  to = "https://9xyetu7zq3.execute-api.us-east-1.amazonaws.com/prod/auth/:splat"
-  status = 200
-  force = true
-
-
-[[redirects]]
-  from = "/api/demo-auth"
-  to = "https://api.securebase.tximhotep.com/demo-auth"
-  status = 200
-  force = true
-
-# SIGNUP - redirect to main marketing site (single source of truth)
+# MARKETING / PRICING REDIRECTS
 [[redirects]]
   from = "/signup"
   to = "https://securebase.tximhotep.com/pricing"
@@ -77,161 +24,13 @@
   status = 301
   force = true
 
-# COMPLIANCE API - Phase 6 (Component 1-5)
-[[redirects]]
-  from = "/api/compliance/soc2/collect"
-  to = "https://api.securebase.tximhotep.com/compliance/soc2/collect"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/compliance/soc2/audit-export"
-  to = "https://api.securebase.tximhotep.com/compliance/soc2/audit-export"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/compliance/fedramp/collect"
-  to = "https://api.securebase.tximhotep.com/compliance/fedramp/collect"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/compliance/export"
-  to = "https://api.securebase.tximhotep.com/compliance/export"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/compliance/export/:job_id"
-  to = "https://api.securebase.tximhotep.com/compliance/export/:job_id"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/compliance/controls/status"
-  to = "https://api.securebase.tximhotep.com/compliance/controls/status"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/compliance/controls/test"
-  to = "https://api.securebase.tximhotep.com/compliance/controls/test"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/compliance/vendors"
-  to = "https://api.securebase.tximhotep.com/compliance/vendors"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/compliance/vendors/:vendor_id"
-  to = "https://api.securebase.tximhotep.com/compliance/vendors/:vendor_id"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/compliance/vendors/:vendor_id/baa"
-  to = "https://api.securebase.tximhotep.com/compliance/vendors/:vendor_id/baa"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/compliance/baa/expiring"
-  to = "https://api.securebase.tximhotep.com/compliance/baa/expiring"
-  status = 200
-  force = true
-
-# SRE METRICS API - Phase 5.3
-[[redirects]]
-  from = "/api/sre/*"
-  to = "https://api.securebase.tximhotep.com/sre/:splat"
-  status = 200
-  force = true
-
-# AUTH API GATEWAY BASE: https://9xyetu7zq3.execute-api.us-east-1.amazonaws.com/prod
-[[redirects]]
-  from = "/api/auth/login"
-  to = "https://9xyetu7zq3.execute-api.us-east-1.amazonaws.com/prod/auth/login"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/auth/register"
-  to = "https://9xyetu7zq3.execute-api.us-east-1.amazonaws.com/prod/auth/register"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/auth/invite"
-  to = "https://9xyetu7zq3.execute-api.us-east-1.amazonaws.com/prod/auth/invite"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/auth/accept-invite"
-  to = "https://9xyetu7zq3.execute-api.us-east-1.amazonaws.com/prod/auth/accept-invite"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/auth/forgot-password"
-  to = "https://9xyetu7zq3.execute-api.us-east-1.amazonaws.com/prod/auth/forgot-password"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/auth/reset-password"
-  to = "https://9xyetu7zq3.execute-api.us-east-1.amazonaws.com/prod/auth/reset-password"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/auth/mfa/setup"
-  to = "https://9xyetu7zq3.execute-api.us-east-1.amazonaws.com/prod/auth/mfa/setup"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/auth/mfa/verify"
-  to = "https://9xyetu7zq3.execute-api.us-east-1.amazonaws.com/prod/auth/mfa/verify"
-  status = 200
-  force = true
-
-# Cloud Connection — cross-account IAM role management
-[[redirects]]
-  from = "/api/cloud-connection/status"
-  to = "https://9xyetu7zq3.execute-api.us-east-1.amazonaws.com/prod/cloud-connection/status"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/cloud-connection/init"
-  to = "https://9xyetu7zq3.execute-api.us-east-1.amazonaws.com/prod/cloud-connection/init"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/cloud-connection/verify"
-  to = "https://9xyetu7zq3.execute-api.us-east-1.amazonaws.com/prod/cloud-connection/verify"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/scan/trigger"
-  to = "https://9xyetu7zq3.execute-api.us-east-1.amazonaws.com/prod/scan/trigger"
-  status = 200
-  force = true
-
-# SPA FALLBACK (LAST)
+# SINGLE PAGE APPLICATION (SPA) FALLBACK
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
-# CSP HEADERS
+# CSP & SECURITY HEADERS (SUPABASE AUTHORIZED)
 [[headers]]
   for = "/*"
   [headers.values]
@@ -241,7 +40,7 @@
       style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
       font-src 'self' data: https://fonts.gstatic.com;
       img-src 'self' data: https: blob:;
-      connect-src 'self' https://api.securebase.tximhotep.com https://9xyetu7zq3.execute-api.us-east-1.amazonaws.com https://api.stripe.com https://*.stripe.com https://www.google-analytics.com https://analytics.google.com https://www.google.com;
+      connect-src 'self' https://dvmuaivsbtrykqsnrtnv.supabase.co https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://*.stripe.com https://www.google-analytics.com https://analytics.google.com https://www.google.com;
       frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://checkout.stripe.com;
       frame-ancestors 'none';
       base-uri 'self';
@@ -264,7 +63,7 @@
       style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
       font-src 'self' data: https://fonts.gstatic.com;
       img-src 'self' data: https: blob:;
-      connect-src 'self' https://api.securebase.tximhotep.com https://9xyetu7zq3.execute-api.us-east-1.amazonaws.com https://api.stripe.com https://*.stripe.com https://www.google-analytics.com https://analytics.google.com https://www.google.com;
+      connect-src 'self' https://dvmuaivsbtrykqsnrtnv.supabase.co https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://*.stripe.com https://www.google-analytics.com https://analytics.google.com https://www.google.com;
       frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://checkout.stripe.com;
       frame-ancestors 'none';
       form-action 'self' https://checkout.stripe.com;
