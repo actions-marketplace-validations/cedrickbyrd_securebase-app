@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-12T07:36:51.676885+00:00",
+  "generated": "2026-10-19T07:27:42.765939+00:00",
   "summary": {
     "total": 54,
     "enriched": 10,
@@ -91,9 +91,9 @@
         "emails_found": []
       },
       "hunter_email": {
-        "email": null,
-        "score": null,
-        "verification_status": null
+        "email": "carlos.renteria@southside.com",
+        "score": 97,
+        "verification_status": "valid"
       },
       "pdl_enrichment": {},
       "demo_url": "https://demo.securebase.tximhotep.com?persona=banking&framework=ffiec&company=Southside_Bank",
@@ -170,7 +170,7 @@
         "emails_found": [
           {
             "value": "makinlotan@firstunitedbank.com",
-            "confidence": 98
+            "confidence": 99
           },
           {
             "value": "bnaveen@firstunitedbank.com",
@@ -211,7 +211,7 @@
           },
           {
             "value": "rfrancis@comerica.com",
-            "confidence": 66
+            "confidence": 65
           }
         ]
       },
@@ -336,7 +336,7 @@
         "emails_found": [
           {
             "value": "sshaik@gnty.com",
-            "confidence": 75
+            "confidence": 77
           }
         ]
       },
@@ -431,11 +431,11 @@
         "emails_found": [
           {
             "value": "dgrimal@alliancebank.com",
-            "confidence": 76
+            "confidence": 75
           },
           {
             "value": "smoore@alliancebank.com",
-            "confidence": 79
+            "confidence": 78
           },
           {
             "value": "bfreeman@alliancebank.com",
@@ -543,7 +543,7 @@
         "emails_found": [
           {
             "value": "betty.stroud@cookchildrens.org",
-            "confidence": 81
+            "confidence": 83
           },
           {
             "value": "marie.howell@cookchildrens.org",
@@ -692,11 +692,11 @@
         "emails_found": [
           {
             "value": "lindy.garcia@bswhealth.com",
-            "confidence": 78
+            "confidence": 79
           },
           {
             "value": "elaine.gustin@bswhealth.com",
-            "confidence": 76
+            "confidence": 78
           },
           {
             "value": "seena.sunil@bswhealth.com",
@@ -745,7 +745,7 @@
         "emails_found": [
           {
             "value": "alex@stradoslabs.com",
-            "confidence": 78
+            "confidence": 77
           },
           {
             "value": "rachel@stradoslabs.com",
@@ -777,12 +777,12 @@
             "confidence": 79
           },
           {
-            "value": "austin@procaresolutions.com",
+            "value": "chanel@procaresolutions.com",
             "confidence": 77
           },
           {
-            "value": "chanel@procaresolutions.com",
-            "confidence": 76
+            "value": "austin@procaresolutions.com",
+            "confidence": 77
           }
         ]
       },
@@ -855,12 +855,12 @@
         "organization": "Hypergiant",
         "emails_found": [
           {
-            "value": "brandon.pierce@hypergiant.com",
+            "value": "colin.leahy@hypergiant.com",
             "confidence": 98
           },
           {
-            "value": "colin.leahy@hypergiant.com",
-            "confidence": 97
+            "value": "brandon.pierce@hypergiant.com",
+            "confidence": 98
           },
           {
             "value": "david.tinkov@hypergiant.com",
@@ -916,7 +916,7 @@
             "confidence": 95
           },
           {
-            "value": "eileen.pruett@crossoverhealth.com",
+            "value": "james.marinchak@crossoverhealth.com",
             "confidence": 95
           }
         ]
@@ -1055,7 +1055,7 @@
           },
           {
             "value": "chelsea.hall@bannerbank.com",
-            "confidence": 97
+            "confidence": 99
           },
           {
             "value": "reece.evans@bannerbank.com",
@@ -1087,11 +1087,11 @@
             "confidence": 75
           },
           {
-            "value": "eryn.vance@southstatebank.com",
+            "value": "jessica.turner@southstatebank.com",
             "confidence": 95
           },
           {
-            "value": "dschork@southstatebank.com",
+            "value": "eryn.vance@southstatebank.com",
             "confidence": 95
           }
         ]
@@ -1345,7 +1345,7 @@
         "emails_found": [
           {
             "value": "sshaik@gnty.com",
-            "confidence": 75
+            "confidence": 77
           }
         ]
       },
@@ -1381,7 +1381,7 @@
         "emails_found": [
           {
             "value": "cdaugherty@woodforest.com",
-            "confidence": 98
+            "confidence": 96
           },
           {
             "value": "timothy.bryan@woodforest.com",
